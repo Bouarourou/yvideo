@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Login Page</title>
+  <!-- Lien vers le fichier CSS externe -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="login-container">
+    <h2>SIGN IN</h2>
+
+    {% if error %}
+      <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <form method="POST">
+      <input type="text" name="username" placeholder="Username" required>
+      <input type="password" name="password" placeholder="Password" required>
+      <div class="links">
+        <a href="#">Forgot Password</a>
+        <a href="#">Signup</a>
+      </div>
+      <button type="submit">Login</button>
+    </form>
+  </div>
+</body>
+<!-- Chatbot Floating Widget -->
+<div id="chat-widget">
+  <div id="chat-header">
+    <img src="{{ url_for('static', filename='avatar.png') }}" alt="Bot Avatar" />
+
+    <div>
+      <div><strong>Bot</strong></div>
+      <small style="color:lightgreen;">🟢 Online</small>
+    </div>
+    <button onclick="toggleChat()" id="close-btn">×</button>
+  </div>
+  <div id="chat-body">
+    <div class="bot-msg">
+      <p><strong>Hello I am <span style="color:#00ffcc;">Bot</span></strong> your AI assistant.<br>
+      How can I assist you today ?<br>Please select the language of your choice:</p>
+      <div class="lang-buttons">
+        <button onclick="sendLang('English')">English</button>
+        <button onclick="sendLang('Arabic')">Arabic</button>
+        <button onclick="sendLang('French')">French</button>
+        <button onclick="sendLang('Russe')">Russe</button>
+        <button onclick="sendLang('Allemand')">Allemand</button>
+        <button onclick="sendLang('Espagnol')">Espagnol</button>
+      </div>
+    </div>
+  </div>
+  <div id="chat-input-container">
+    <input type="text" id="chat-input" placeholder="Type here..." onkeypress="handleChat(event)" />
+    <button onclick="sendMessage()">➤</button>
+  </div>
+</div>
+
+<!-- Chat Bubble Toggle Button -->
+<div id="chat-toggle" onclick="toggleChat()">
+  <img src="{{ url_for('static', filename='Robot.png') }}" alt="Open Chatbot" />
+</div>
+
+</div>
+
+<style>
+#chat-widget {
+  position: fixed;
+  bottom: 80px;
+  right: 20px;
+  width: 320px;
+  max-height: 500px;
+  background: #1b1b1b;
+  color: white;
+  font-family: Arial;
+  border-radius: 10px;
+  box-shadow: 0 0 15px #00ffcc;
+  display: none;
+  flex-direction: column;
+  overflow: hidden;
+  z-index: 1000;
+}
+#chat-header {
+  background: #00ffcc;
+  color: #000;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+#chat-header img {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+}
+#chat-body {
+  flex: 1;
+  padding: 10px;
+  overflow-y: auto;
+  background: #121212;
+}
+.bot-msg, .user-msg {
+  margin-bottom: 10px;
+}
+.user-msg {
+  text-align: right;
+  color: #00ffcc;
+}
+#chat-input-container {
+  display: flex;
+  border-top: 1px solid #333;
+}
+#chat-input-container input {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  outline: none;
+  background: #222;
+  color: white;
+}
+#chat-input-container button {
+  background: #00ffcc;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+}
+#chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: #00ffcc;
+  color: #000;
+  font-size: 22px;
+  padding: 10px;
+  border-radius: 50%;
+  cursor: pointer;
+  z-index: 1000;
+}
+#close-btn {
+  background: none;
+  border: none;
+  font-size: 20px;
+  margin-left: auto;
+  cursor: pointer;
+}
+.lang-buttons button {
+  margin: 5px 5px 0 0;
+  background: transparent;
+  border: 1px solid #00ffcc;
+  color: #00ffcc;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+</style>
+
+<script>
+function toggleChat() {
+  const chat = document.getElementById("chat-widget");
+  chat.style.display = chat.style.display === "flex" ? "none" : "flex";
+}
+
+function sendLang(language) {
+  const chatBody = document.getElementById('chat-body');
+  chatBody.innerHTML += `<div class="user-msg">${language}</div>`;
+  chatBody.innerHTML += `<div class="bot-msg">You selected ${language}. How can I help you in ${language}?</div>`;
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function handleChat(event) {
+  if (event.key === 'Enter') {
+    sendMessage();
+  }
+}
+
+function sendMessage() {
+  const input = document.getElementById('chat-input');
+  const msg = input.value;
+  if (msg.trim() === '') return;
+
+  const chatBody = document.getElementById('chat-body');
+  chatBody.innerHTML += `<div class="user-msg">${msg}</div>`;
+
+  fetch('/chatbot', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({ message: msg })
+  })
+  .then(res => res.json())
+  .then(data => {
+    chatBody.innerHTML += `<div class="bot-msg">${data.response}</div>`;
+    chatBody.scrollTop = chatBody.scrollHeight;
+  });
+
+  input.value = '';
+}
+</script>
+
+
+</html>

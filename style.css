@@ -1,0 +1,95 @@
+/* reset basique */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* corps de page */
+body {
+  font-family: Arial, sans-serif;
+  background-color: #1e1e2f;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* conteneur du formulaire */
+.login-container {
+  background-color: #111;
+  padding: 40px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 255, 0, 0.3);
+  text-align: center;
+  width: 300px;
+}
+
+/* titre */
+.login-container h2 {
+  color: #00ff00;
+  margin-bottom: 20px;
+}
+
+/* champs de saisie */
+.login-container input[type="text"],
+.login-container input[type="password"] {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  background: #222;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 4px;
+}
+
+/* liens */
+.login-container .links {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.login-container a {
+  color: #ccc;
+  font-size: 12px;
+  text-decoration: none;
+}
+.login-container a:hover {
+  text-decoration: underline;
+}
+
+/* bouton */
+.login-container button {
+  background-color: #00ff00;
+  border: none;
+  color: #000;
+  padding: 10px 20px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+  font-weight: bold;
+}
+.login-container button:hover {
+  background-color: #00cc00;
+}
+#chat-toggle {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1000;
+}
+#chat-toggle img {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  box-shadow: 0 0 15px #00ffcc;
+  transition: transform 0.2s ease;
+}
+#chat-toggle img:hover {
+  transform: scale(1.1);
+}
+
